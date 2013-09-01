@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<extension type="module" version="2.0.0" method="upgrade" client="site">
+	<name> Domain Check</name>
+	<author>Renato Arrieche</author>
+	<creationDate>August 2013</creationDate>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>renato.shuma@gmail.com</authorEmail>
+	<authorUrl>www.google.com</authorUrl>
+	<version>2.0.0</version>
+	<description>Mostra os domínios disponíveis.</description>
+	<files>
+		<filename module="mod_domain_check">mod_domain_check.php</filename> 
+	</files>
+		<config>
+		<fields name="params">
+		<fieldset name="basic">
+		<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="A suffix to be applied to the css class of the module (table.moduletable), this allows individual module styling" />
+		<field name="pretext" type="textarea" cols="40" rows="5" default="" label="Pre-Text" description="Enter any pre-text message." />
+		<field name="label" type="text" default="Domain Name" label="Label" description="" />
+		<field name="buttontext" type="text" default="Check Domain" label="Button Text" description="" />
+		<field name="checkall" type="text" default="Check All Domain Types" label="Check All Text" description="" />
+		<field name="resulttext" type="text" default="Result" label="Result" description="" />
+		<field name="forwardurl" type="text" default="" label="Forward URL" description="If you would like the form to foward the person to another page after submitting the forum enter the entire url, please note the module must also be published to this page." />
+      <!--
+		<field name="whois_server" type="text" default="whois.registro.br" label="WHOIS server" description="Servidor principal para buscas." />
+      -->
+		<field name="whois_server" type="text" default="" label="WHOIS server" description="Servidor principal para buscas." />
+		<field name="avaliable_text" type="text" default="Avaliable" label="Avaliable Text" description="Text label if doamin avaliable" />
+		<field name="taken_text" type="text" default="Taken" label="Taken Text" description="Text label if doamin is unavaliable (taken)" />
+
+		<field name="domain1" type="checkbox" default="1" label=".com" value="com">
+		</field>
+		<field name="domain2" type="checkbox" default="1" label=".net" value="net">
+		</field>
+		<field name="domain3" type="checkbox" default="1" label=".info" value="info">
+		</field>
+		<field name="domain4" type="checkbox" default="1" label=".org" value="org">
+		</field>
+		<field name="domain5" type="checkbox" default="1" label=".edu" value="edu">
+		</field>
+		<field name="domain6" type="checkbox" default="1" label=".co" value="co">
+		</field>
+		<field name="domain7" type="checkbox" default="1" label=".name" value="name">
+		</field>
+		<field name="domain8" type="checkbox" default="1" label=".cc" value="cc">
+		</field>
+		<field name="domain9" type="checkbox" default="1" label=".biz" value="biz">
+		</field>
+		<field name="domain10" type="checkbox" default="1" label=".mil" value="mil">
+		</field>
+		<field name="domain11" type="checkbox" default="1" label=".gov" value="gov">
+		</field>
+		<field name="domain12" type="checkbox" default="1" label=".mobi" value="mobi">
+		</field>
+		</fieldset>
+      <fieldset name="advanced">
+		<field name="country0" type="checkbox"  label="internacional" value="iii" default="1">
+		</field>
+		<field name="country1" type="checkbox"  label=".br" value="br" default="1">
+		</field>
+		<field name="country2" type="checkbox" default="1" label=".pt" value="pt">
+		</field>
+		<field name="country3" type="checkbox" default="1" label=".us" value="us">
+		</field>
+		<field name="country_text" type="text" default="" label="insert a list of countries here" value="">
+		</field>
+      </fieldset>
+		</fields>
+	</config>
+</extension>

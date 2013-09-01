@@ -52,40 +52,44 @@ for ($i = 0; $i <= $num_countries; $i++) {
 }
 
 
-function getCheckboxDomains($domains, $countries = array('iii' => '')) {
-   $checados = array('com', 'org', 'net');
+function getCheckboxDomains($domains, $checados = array('com', 'org', 'net')) {
+   // se não tiver nenhuma entrada pra $domains, retorna false.
    if (!$domains || !is_array($domains) || !count($domains)) {
-      return array();
+      return false;
    }
+
+   $domains_arr = array();
    foreach ($domains as $k => $dom) {
       $checked = '';
       if(in_array($dom, $checados)){
          $checked = 'checked="checked"';
       }
-      if ($dom !== "") { ?>	
-         <input type="checkbox" name="<?php echo $dom ?>" value="<?php echo $dom ?>" <?php echo $checked ?> /> <?php echo $dom ?>
-      <?php
+      if ($dom !== "") { 
+         $domains_arr[] = "<input type='checkbox' name='$dom' value='$dom' $checked/> $dom'";
       }
    }
+   return $domains_arr;
 }
 
 
-function getCheckboxCountries($countries = array('iii' => '')) {
-   $checados = array('iii', 'br');
+function getCheckboxCountries($countries = array('iii' => ''), $checados = array('iii', 'br')) {
    if (!$countries || !is_array($countries) || !count($countries)) {
       return array();
    }
+
+   $countries_arr = array();
    foreach ($countries as $k => $c) {
       $checked = '';
       if(in_array($c, $checados)){
          $checked = 'checked="checked"';
       }
-      if ($c && $c != "iii") { ?>	
-         <input type="checkbox" name="<?php echo $c ?>" value="<?php echo $c ?>" <?php echo $checked ?>/> <?php echo $c ;
-      } else if($c === 'iii' ){ ?>
-         <input type="checkbox" name="iii" value="iii" <?php echo $checked ?>/> internacional <?php
+      if ($c && $c != "iii") { 	
+         $countries_arr[] = "<input type='checkbox' name='$c' value='$c' $checked /> $c";
+      } else if($c === 'iii' ){ 
+         $countries_arr[] = "<input type='checkbox' name='iii' value='iii' $checked /> Internacional";
       }
    }
+   return $countries_arr;
 }
 
 function checkDomain($domain, $server, $findText) {
@@ -119,6 +123,7 @@ function showDomainResult($domain, $server, $findText, $arr) {
    }
 }
 
+
 function getFindText($country, $tld, $conf = null){
    $retorno = null;
    $textos = array(
@@ -146,6 +151,8 @@ function getFindText($country, $tld, $conf = null){
    }
    return $retorno;
 }
+
+
 function getServer($country, $tld, $server_default = null){
    $retorno = null;
    $servers = array(
@@ -164,13 +171,15 @@ function getServer($country, $tld, $server_default = null){
    
    if(isset($servers[$country])){
       $lista_servers = $servers[$country];
-      if($country === 'iii'){
-         $retorno = isset($lista_servers[$tld]) ? $lista_servers[$tld] : $lista_servers['com'];
-      } else if(is_array($lista_servers) && count($lista_servers >= 1)){
-         $retorno = isset($lista_servers[$tld]) ? $lista_servers[$tld] : $lista_servers[0];
-      }else {
+      if(isset($lista_servers[$tld])){
+         $retorno = $lista_servers[$tld];
+      } else if(isset($lista_servers[0])){
+         $retorno = $lista_servers [0];
+      } else {
          $retorno = $server_default;
       }
+   } else {
+      $retorno = $server_default;
    }
    return $retorno;
 }

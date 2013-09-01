@@ -24,9 +24,15 @@
       <!--
 		<field name="whois_server" type="text" default="whois.registro.br" label="WHOIS server" description="Servidor principal para buscas." />
       -->
-		<field name="whois_server" type="text" default="" label="WHOIS server" description="Servidor principal para buscas." />
+		<field name="whois_server" type="text" default="" label="WHOIS server" description="Servidor principal para buscas. Se vazio, fará com uma lista de servidores." />
 		<field name="avaliable_text" type="text" default="Avaliable" label="Avaliable Text" description="Text label if doamin avaliable" />
 		<field name="taken_text" type="text" default="Taken" label="Taken Text" description="Text label if doamin is unavaliable (taken)" />
+      <field name="toppings" type="checkboxes" label="laalal">
+         <option value="anch" default="">Anchovies</option>
+         <option value="chor">Chorizo</option>
+         <option value="on">Onions</option>
+         <option value="mush">Mushrooms</option>
+      </field>
 
 		<field name="domain1" type="checkbox" default="1" label=".com" value="com">
 		</field>

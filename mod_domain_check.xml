@@ -9,7 +9,10 @@
 	<version>2.0.0</version>
 	<description>Mostra os domínios disponíveis.</description>
 	<files>
+		<filename>mod_domain_check.xml</filename> 
 		<filename module="mod_domain_check">mod_domain_check.php</filename> 
+		<filename>helper.php</filename> 
+		<filename>tmpl/default.php</filename> 
 	</files>
 		<config>
 		<fields name="params">
@@ -27,49 +30,27 @@
 		<field name="whois_server" type="text" default="" label="WHOIS server" description="Servidor principal para buscas. Se vazio, fará com uma lista de servidores." />
 		<field name="avaliable_text" type="text" default="Avaliable" label="Avaliable Text" description="Text label if doamin avaliable" />
 		<field name="taken_text" type="text" default="Taken" label="Taken Text" description="Text label if doamin is unavaliable (taken)" />
-      <field name="toppings" type="checkboxes" label="laalal">
-         <option value="anch" default="">Anchovies</option>
-         <option value="chor">Chorizo</option>
-         <option value="on">Onions</option>
-         <option value="mush">Mushrooms</option>
+      <field name="domains" type="checkboxes" label="Domain Extensions">
+         <option value="com" default="com">.com</option>
+         <option value="net">.net</option>
+         <option value="org">.org</option>
+         <option value="gov">.gov</option>
+         <option value="info">.info</option>
+         <option value="edu">.edu</option>
+         <option value="co">.co</option>
+         <option value="biz">.biz</option>
+         <option value="name">.name</option>
+         <option value="mil">.mil</option>
+         <option value="mobi">.mobi</option>
+         <option value="cc">.cc</option>
       </field>
-
-		<field name="domain1" type="checkbox" default="1" label=".com" value="com">
-		</field>
-		<field name="domain2" type="checkbox" default="1" label=".net" value="net">
-		</field>
-		<field name="domain3" type="checkbox" default="1" label=".info" value="info">
-		</field>
-		<field name="domain4" type="checkbox" default="1" label=".org" value="org">
-		</field>
-		<field name="domain5" type="checkbox" default="1" label=".edu" value="edu">
-		</field>
-		<field name="domain6" type="checkbox" default="1" label=".co" value="co">
-		</field>
-		<field name="domain7" type="checkbox" default="1" label=".name" value="name">
-		</field>
-		<field name="domain8" type="checkbox" default="1" label=".cc" value="cc">
-		</field>
-		<field name="domain9" type="checkbox" default="1" label=".biz" value="biz">
-		</field>
-		<field name="domain10" type="checkbox" default="1" label=".mil" value="mil">
-		</field>
-		<field name="domain11" type="checkbox" default="1" label=".gov" value="gov">
-		</field>
-		<field name="domain12" type="checkbox" default="1" label=".mobi" value="mobi">
-		</field>
+      <field name="countries" type="checkboxes" label="Country Code Extensions">
+         <option value="iii" default="iii">Generic (international)</option>
+         <option value="br">.br</option>
+         <option value="pt">.pt</option>
+      </field>
 		</fieldset>
       <fieldset name="advanced">
-		<field name="country0" type="checkbox"  label="internacional" value="iii" default="1">
-		</field>
-		<field name="country1" type="checkbox"  label=".br" value="br" default="1">
-		</field>
-		<field name="country2" type="checkbox" default="1" label=".pt" value="pt">
-		</field>
-		<field name="country3" type="checkbox" default="1" label=".us" value="us">
-		</field>
-		<field name="country_text" type="text" default="" label="insert a list of countries here" value="">
-		</field>
       </fieldset>
 		</fields>
 	</config>

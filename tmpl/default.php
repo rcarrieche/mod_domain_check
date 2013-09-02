@@ -25,9 +25,9 @@ defined('_JEXEC') or die('Restricted access');
 
 <?php if ($pretext != "") { ?>
    <div class="pretext">
-   <?php echo $pretext ?>
-   </div> <?php
-} ?>
+      <?php echo $pretext ?>
+   </div> <?php }
+   ?>
 
 
 <div id="main">
@@ -44,18 +44,30 @@ defined('_JEXEC') or die('Restricted access');
          -->
          <div>
             <?php
-            $chk_domains = $dck->getCheckboxDomains($domains);
-            foreach($chk_domains as $cd){
+            $pogdomains = array();
+            if(!isset($_SESSION['pogdomains'])){
+               $pogdomains = array('com', 'net');
+            } else {
+               $pogdomains = $_SESSION['pogdomains'];
+            }
+            $chk_domains = $dck->getCheckboxDomains($domains, $pogdomains);
+            foreach ($chk_domains as $cd) {
                echo $cd;
             }
             ?> 
          </div>
          <div>
-            <?php $chk_countries = $dck->getCheckboxCountries($countries);
-            foreach($chk_countries as $cc){
+            <?php
+            $pogcountries = array();
+            if(!isset($_SESSION['pogcountries'])){
+               $pogcountries = array('iii', 'br');
+            } else {
+               $pogcountries = $_SESSION['pogcountries'];
+            }
+            $chk_countries = $dck->getCheckboxCountries($countries, $pogcountries);
+            foreach ($chk_countries as $cc) {
                echo $cc;
             }
-            
             ?> 
          </div>
       </div>
@@ -68,37 +80,43 @@ defined('_JEXEC') or die('Restricted access');
    <?php
    if (isset($_POST['submitBtn'])) {
       // validar com regex
-       
-      if(isset($_POST['domainname'])){
+
+      if (isset($_POST['domainname'])) {
          $domainbase = $_POST['domainname'];
       } else {
          return false;
       }
 
       $chosen_domains = array();
-      foreach($domains as $k => $dom){
-         if(isset($_POST[$dom])){
+      foreach ($domains as $k => $dom) {
+         if (isset($_POST[$dom])) {
             $chosen_domains[$k] = $dom;
          }
       }
-      $chosen_countries= array();
-      foreach($countries as $k => $c){
-         if(isset($_POST[$c])){
+      $chosen_countries = array();
+      foreach ($countries as $k => $c) {
+         if (isset($_POST[$c])) {
             $chosen_countries[$k] = $c;
          }
       }
-
-      if (strlen($domainbase) > 0) { // verificação pela regex?>
-         <div id="caption" ><?php echo $resulttext ?>: </div>
+      $_SESSION['pogcountries'] = $chosen_countries;
+      $_SESSION['pogdomains'] = $chosen_domains;
+      ?> <div id="caption" ><?php echo $resulttext ?>: </div> <?php 
+      if (!count($chosen_countries) || !count($chosen_domains)) { ?>
+         <div id="result error"> Error: select, at least, 1 country and 1 top level domain.</div><?php
+      } else if (strlen($domainbase) > 2) { // verificação pela regex
+         ?>
          <div id="result"> <?php
-            $results = $dck->results($domainbase, $chosen_domains, $chosen_countries);
-            foreach($results as $res){
-               print $res;
-            } ?>
-         </div>
-      <?php
+         $results = $dck->results($domainbase, $chosen_domains, $chosen_countries);
+         foreach ($results as $res) {
+            print $res;
+         }
+         ?>
+         </div> <?php 
+      } else { ?>
+         <div id="result error"> Error: domain name is too short.</div><?php
+      }
+      unset($_POST['submitBtn']);
    }
-}
-
-?>
+   ?>
 </div>

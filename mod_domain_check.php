@@ -12,8 +12,8 @@ $forwardurl = $params->get('forwardurl', '');
 $whois_server = $params->get('whois_server', ''); 
 $avaliable_text = $params->get('avaliable_text', 'Avaliable'); 
 $taken_text = $params->get('taken_text', 'Taken'); 
-$domains = $params->get('domains', array()); 
-$countries = $params->get('countries', array());
+$domains = $params->get('domains', array('com', 'net', 'org', 'info')); 
+$countries = $params->get('countries', array('iii', 'br'));
 
 
 $dck = modDomainCheckHelper::getInstance();

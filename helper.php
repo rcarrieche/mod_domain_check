@@ -8,17 +8,35 @@
 
 class modDomainCheckHelper {
 
-   /**
-    * Retrieves the hello message
-    *
-    * @param array $params An object containing the module parameters
-    * @access public
-    */
-   public static function getHello($params) {
-      return 'Hello, World!';
+   protected $servers = array(
+       'iii' => array(
+           'com' => 'whois.crsnic.net',
+           'net' => 'whois.crsnic.net',
+           'edu' => 'whois.crsnic.net',
+           'info' => 'whois.afilias.net',
+           'org' => 'whois.publicinterestregistry.net',
+           'biz' => 'whois.neulevel.biz',
+           'default' => 'whois.crsnic.net'
+       ),
+       'br' => array( 'default' => 'whois.registro.br'),
+       'ca' => array('default' => 'whois.cira.ca'),
+       'uk' => array('default' => 'whois.nic.uk')
+   );
+   protected $checados;
+   private static $instance = null;
+
+   private function __construct() {
+      
    }
 
-   public static function getCheckboxDomains($domains, $checados = array('com', 'org', 'net')) {
+   public static function getInstance() {
+      if (self::instance === null) {
+         self::$instance = new modDomainCheckHelper();
+      }
+      return self::$instance;
+   }
+
+   public function getCheckboxDomains($domains, $checados = array('com', 'org', 'net')) {
       // se não tiver nenhuma entrada pra $domains, retorna false.
       if (!$domains || !is_array($domains) || !count($domains)) {
          return false;
@@ -37,7 +55,7 @@ class modDomainCheckHelper {
       return $domains_arr;
    }
 
-   public static function getCheckboxCountries($countries = array('iii' => ''), $checados = array('iii', 'br')) {
+   public function getCheckboxCountries($countries = array('iii' => ''), $checados = array('iii', 'br')) {
       if (!$countries || !is_array($countries) || !count($countries)) {
          return array();
       }
@@ -57,7 +75,7 @@ class modDomainCheckHelper {
       return $countries_arr;
    }
 
-   public static function checkDomain($domain, $server, $findText) {
+   public function getServerResponse($domain, $server) {
       $con = fsockopen($server, 43);
       if (!$con)
          return false;
@@ -67,81 +85,82 @@ class modDomainCheckHelper {
          $response .= fgets($con, 128);
       }
       fclose($con);
-      //echo $response;
-      if (strpos($response, $findText)) {
-         return true;
-      } else {
-         return false;
-      }
+      return $response;
+      /*
+        //echo $response;
+        if (strpos($response, $findText)) {
+        return true;
+        } else {
+        return false;
+        }
+       * 
+       */
    }
 
-   public static function showDomainResult($domain, $server, $findText, $arr) {
+   public function getDomainResult($domain, $server, $findText, $arr) {
       $avaliable_text = isset($arr['avaliable_text']) ? $arr['avaliable_text'] : 'Avaliable';
       $taken_text = isset($arr['taken_text']) ? $arr['taken_text'] : 'Taken';
 
       $chk = checkDomain($domain, $server, $findText);
       if ($chk) {
-         echo "<div class='avaliable_text'>$domain $avaliable_text</div>";
+         return "<div class='avaliable_text'>$domain $avaliable_text</div>";
       } else {
-         echo "<div class='taken_text'>$domain $taken_text</div>"; //margin-bottom:4px
+         return "<div class='taken_text'>$domain $taken_text</div>"; //margin-bottom:4px
       }
    }
 
-   public static function getFindText($country, $tld, $conf = null) {
+   /**
+    * 
+    * @param type $country
+    * @param type $tld
+    * @param type $conf
+    * @return array
+    */
+   public function getFindText($country, $tld, $conf = 'avaliable') {
       $retorno = null;
+      $comum = array(
+          'avaliable' => array('No match for'),
+          'taken' => array(),
+          'error' => array()
+      );
       $textos = array(
           'iii' => array(
-              'avaliable' => array('Not match for'),
-              'taken' => array(),
-              'error' => array()
+              'com' => $comum,
+              'org' => array(
+                  'avaliable' => array('NOT FOUND'),
+                  'taken' => array(),
+                  'error' => array()
+              ),
+              'default' => $comum
           ),
           'br' => array(
-              'avaliable' => array('Domínio inexistente:', 'inexistente', 'No match for'),
-              'taken' => array('owner:', 'ownerid:', 'entidade:', 'documento:', 'country'),
-              'error' => array('Consulta inválida')
+              'default' => $comum
           ),
+          'default' => array('No match for')
       );
-
-      if (isset($servers[$country])) {
-         $lista_servers = $servers[$country];
-         if ($country === 'iii') {
-            $retorno = isset($lista_servers[$tld]) ? $lista_servers[$tld] : $lista_servers['com'];
-         } else if (is_array($lista_servers) && count($lista_servers > 1)) {
-            $retorno = isset($lista_servers[$tld]) ? $lista_servers[$tld] : $lista_servers['com'];
+      if (isset($textos[$country])) {
+         $lista_textos = $textos[$country];
+         if (isset($lista_textos[$tld])) {
+            $retorno = $lista_textos[$tld][$conf];
          } else {
-            $retorno = $lista_servers[0];
+            $retorno = $lista_textos['default'][$conf];
          }
+      } else {
+         $retorno = $textos['default'];
       }
       return $retorno;
    }
 
-   public static function getServer($country, $tld, $server_default = null) {
+   public function getServer($country, $tld) {
       $retorno = null;
-      $servers = array(
-          'iii' => array(
-              'com' => 'whois.crsnic.net',
-              'net' => 'whois.crsnic.net',
-              'edu' => 'whois.crsnic.net',
-              'info' => 'whois.afilias.net',
-              'org' => 'whois.publicinterestregistry.net',
-              'biz' => 'whois.neulevel.biz'
-          ),
-          'br' => array('whois.registro.br'),
-          'ca' => array('whois.cira.ca'),
-          'uk' => array('whois.nic.uk')
-      );
-
+      $servers = $this->servers;
       if (isset($servers[$country])) {
          $lista_servers = $servers[$country];
          if (isset($lista_servers[$tld])) {
             $retorno = $lista_servers[$tld];
          } else if (isset($lista_servers[0])) {
             $retorno = $lista_servers [0];
-         } else {
-            $retorno = $server_default;
          }
-      } else {
-         $retorno = $server_default;
       }
       return $retorno;
    }

@@ -28,8 +28,8 @@
 		<field name="whois_server" type="text" default="whois.registro.br" label="WHOIS server" description="Servidor principal para buscas." />
       -->
 		<field name="whois_server" type="text" default="" label="WHOIS server" description="Servidor principal para buscas. Se vazio, fará com uma lista de servidores." />
-		<field name="avaliable_text" type="text" default="Avaliable" label="Avaliable Text" description="Text label if doamin avaliable" />
-		<field name="taken_text" type="text" default="Taken" label="Taken Text" description="Text label if doamin is unavaliable (taken)" />
+		<field name="avaliable_text" type="text" default="Disponível" label="Avaliable Text" description="Text label if doamin avaliable" />
+		<field name="taken_text" type="text" default="Indisponível" label="Taken Text" description="Text label if doamin is unavaliable (taken)" />
       <field name="domains" type="checkboxes" label="Domain Extensions">
          <option value="com" default="com">.com</option>
          <option value="net">.net</option>

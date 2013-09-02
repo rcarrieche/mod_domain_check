@@ -17,6 +17,7 @@ $countries = $params->get('countries', array());
 
 
 $dck = modDomainCheckHelper::getInstance();
+$dck->setResultText($avaliable_text, $taken_text);
 // whois.crsnic.net
 // whois.registro.br
 /*

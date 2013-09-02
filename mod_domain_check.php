@@ -2,7 +2,6 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 require_once( dirname(__FILE__).DS.'helper.php' );
-$x = modDomainCheckHelper::getHello($params);
 
 $label = $params->get('label', '');
 $buttontext = $params->get('buttontext', '');
@@ -16,6 +15,8 @@ $taken_text = $params->get('taken_text', 'Taken');
 $domains = $params->get('domains', array()); 
 $countries = $params->get('countries', array());
 
+
+$dck = modDomainCheckHelper::getInstance();
 // whois.crsnic.net
 // whois.registro.br
 /*

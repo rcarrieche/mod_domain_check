@@ -18,61 +18,25 @@ class modDomainCheckHelper {
            'biz' => 'whois.neulevel.biz',
            'default' => 'whois.crsnic.net'
        ),
-       'br' => array( 'default' => 'whois.registro.br'),
+       'br' => array('default' => 'whois.registro.br'),
        'ca' => array('default' => 'whois.cira.ca'),
-       'uk' => array('default' => 'whois.nic.uk')
+       'uk' => array('default' => 'whois.nic.uk'),
+       'default' => ''
    );
    protected $checados;
    private static $instance = null;
+   protected $avaliable_text = 'Avaliable';
+   protected $taken_text = 'Taken';
 
    private function __construct() {
       
    }
 
    public static function getInstance() {
-      if (self::instance === null) {
+      if (self::$instance === null) {
          self::$instance = new modDomainCheckHelper();
       }
       return self::$instance;
-   }
-
-   public function getCheckboxDomains($domains, $checados = array('com', 'org', 'net')) {
-      // se não tiver nenhuma entrada pra $domains, retorna false.
-      if (!$domains || !is_array($domains) || !count($domains)) {
-         return false;
-      }
-
-      $domains_arr = array();
-      foreach ($domains as $k => $dom) {
-         $checked = '';
-         if (in_array($dom, $checados)) {
-            $checked = 'checked="checked"';
-         }
-         if ($dom !== "") {
-            $domains_arr[] = "<input type='checkbox' name='$dom' value='$dom' $checked/> $dom'";
-         }
-      }
-      return $domains_arr;
-   }
-
-   public function getCheckboxCountries($countries = array('iii' => ''), $checados = array('iii', 'br')) {
-      if (!$countries || !is_array($countries) || !count($countries)) {
-         return array();
-      }
-
-      $countries_arr = array();
-      foreach ($countries as $k => $c) {
-         $checked = '';
-         if (in_array($c, $checados)) {
-            $checked = 'checked="checked"';
-         }
-         if ($c && $c != "iii") {
-            $countries_arr[] = "<input type='checkbox' name='$c' value='$c' $checked /> $c";
-         } else if ($c === 'iii') {
-            $countries_arr[] = "<input type='checkbox' name='iii' value='iii' $checked /> Internacional";
-         }
-      }
-      return $countries_arr;
    }
 
    public function getServerResponse($domain, $server) {
@@ -97,11 +61,26 @@ class modDomainCheckHelper {
        */
    }
 
-   public function getDomainResult($domain, $server, $findText, $arr) {
-      $avaliable_text = isset($arr['avaliable_text']) ? $arr['avaliable_text'] : 'Avaliable';
-      $taken_text = isset($arr['taken_text']) ? $arr['taken_text'] : 'Taken';
+   public function checkDomain($domain, $server, $findArray) {
+      $response = $this->getServerResponse($domain, $server);
+      $tem = false;
+      foreach ($findArray as $ftext) {
+         if (strpos($response, $ftext)) {
+            $tem = true;
+         }
+      }
+      return $tem;
+   }
 
-      $chk = checkDomain($domain, $server, $findText);
+   public function setResultText($avaliable_text, $taken_text) {
+      $this->avaliable_text = $avaliable_text;
+      $this->taken_text = $taken_text;
+   }
+
+   public function getDomainResult($domain, $server, $findArray) {
+      $avaliable_text = $this->avaliable_text;
+      $taken_text = $this->taken_text;
+      $chk = $this->checkDomain($domain, $server, $findArray);
       if ($chk) {
          return "<div class='avaliable_text'>$domain $avaliable_text</div>";
       } else {
@@ -116,7 +95,7 @@ class modDomainCheckHelper {
     * @param type $conf
     * @return array
     */
-   public function getFindText($country, $tld, $conf = 'avaliable') {
+   public function getFindArray($country, $tld, $conf = 'avaliable') {
       $retorno = null;
       $comum = array(
           'avaliable' => array('No match for'),
@@ -151,6 +130,12 @@ class modDomainCheckHelper {
       return $retorno;
    }
 
+   /**
+    * 
+    * @param type $country
+    * @param type $tld
+    * @return string
+    */
    public function getServer($country, $tld) {
       $retorno = null;
       $servers = $this->servers;
@@ -158,11 +143,65 @@ class modDomainCheckHelper {
          $lista_servers = $servers[$country];
          if (isset($lista_servers[$tld])) {
             $retorno = $lista_servers[$tld];
-         } else if (isset($lista_servers[0])) {
-            $retorno = $lista_servers [0];
+         } else {
+            $retorno = $lista_servers ['default'];
          }
+      } else {
+         $retorno = $servers['default'];
       }
       return $retorno;
+   }
+
+   public function getCheckboxCountries($countries = array('iii' => ''), $checados = array('iii', 'br')) {
+      if (!$countries || !is_array($countries) || !count($countries)) {
+         return array();
+      }
+
+      $countries_arr = array();
+      foreach ($countries as $k => $c) {
+         $checked = '';
+         if (in_array($c, $checados)) {
+            $checked = 'checked="checked"';
+         }
+         if ($c && $c != "iii") {
+            $countries_arr[] = "<input type='checkbox' name='$c' value='$c' $checked /> $c";
+         } else if ($c === 'iii') {
+            $countries_arr[] = "<input type='checkbox' name='iii' value='iii' $checked /> Internacional";
+         }
+      }
+      return $countries_arr;
+   }
+
+   public function getCheckboxDomains($domains, $checados = array('com', 'org', 'net')) {
+      // se não tiver nenhuma entrada pra $domains, retorna false.
+      if (!$domains || !is_array($domains) || !count($domains)) {
+         return false;
+      }
+
+      $domains_arr = array();
+      foreach ($domains as $k => $dom) {
+         $checked = '';
+         if (in_array($dom, $checados)) {
+            $checked = 'checked="checked"';
+         }
+         if ($dom !== "") {
+            $domains_arr[] = "<input type='checkbox' name='$dom' value='$dom' $checked/> $dom";
+         }
+      }
+      return $domains_arr;
+   }
+
+   public function results($domainbase, array $tlds, array $countries) {
+      $res = array();
+      foreach ($tlds as $kd => $d) {
+         foreach ($countries as $kc => $c) {
+            $domain = $domainbase . "." . $d . ($c != 'iii' ? "." . $c : '');
+            $sv = $this->getServer($c, $d);
+            $findArr = $this->getFindArray($c, $d);
+            $res[] = $this->getDomainResult($domain, $sv, $findArr);
+         }
+      }
+      return $res;
    }
 
 }

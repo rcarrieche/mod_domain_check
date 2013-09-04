@@ -50,26 +50,20 @@ class modDomainCheckHelper {
       }
       fclose($con);
       return $response;
-      /*
-        //echo $response;
-        if (strpos($response, $findText)) {
-        return true;
-        } else {
-        return false;
-        }
-       * 
-       */
    }
 
    public function checkDomain($domain, $server, $findArray) {
       $response = $this->getServerResponse($domain, $server);
-      $tem = false;
+      if(!$response){
+         echo '<div class="erro">Erro ao conectar no servidor</div>';
+      }
+      $tem_text = false;
       foreach ($findArray as $ftext) {
          if (strpos($response, $ftext)) {
-            $tem = true;
+            $tem_text = true;
          }
       }
-      return $tem;
+      return $tem_text;
    }
 
    public function setResultText($avaliable_text, $taken_text) {
@@ -164,9 +158,9 @@ class modDomainCheckHelper {
             $checked = 'checked="checked"';
          }
          if ($c && $c != "iii") {
-            $countries_arr[] = "<input type='checkbox' name='$c' value='$c' $checked /> $c";
+            $countries_arr[] = "<input type='checkbox' class='domains_and_countries' name='$c' value='$c' $checked /> $c";
          } else if ($c === 'iii') {
-            $countries_arr[] = "<input type='checkbox' name='iii' value='iii' $checked /> Internacional";
+            $countries_arr[] = "<input type='checkbox' class='domains_and_countries' name='iii' value='iii' $checked /> Internacional";
          }
       }
       return $countries_arr;
@@ -185,7 +179,7 @@ class modDomainCheckHelper {
             $checked = 'checked="checked"';
          }
          if ($dom !== "") {
-            $domains_arr[] = "<input type='checkbox' name='$dom' value='$dom' $checked/> $dom";
+            $domains_arr[] = "<input type='checkbox' class='domains_and_countries' name='$dom' value='$dom' $checked/> $dom";
          }
       }
       return $domains_arr;

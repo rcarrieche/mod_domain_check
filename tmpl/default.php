@@ -2,6 +2,23 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 ?>
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+   $(document).ready(function(){
+      $('#check_all_domains').click(function(){
+         var c = $(this).is(':checked')?'checked': false;
+         console.info(c);
+         if(c){
+            $('.domains_and_countries').attr('checked', c);
+         } else {
+            $('.domains_and_countries').removeAttr('checked');
+         }
+      });
+
+   });
+
+</script>
+
 <style>
    .pretext{
       margin-bottom:8px;
@@ -37,16 +54,14 @@ defined('_JEXEC') or die('Restricted access');
          <input class="text" name="domainname" type="text" />
       </div>
       <div class="checkboxes">
-         <!-- 
-         <div style="margin-bottom:8px">
-            <input type="checkbox" name="all" checked="checked"/> <?php echo $checkall ?>
+         <div id="check_all">
+            <input type="checkbox" id="check_all_domains" name="check_all_domains"/> <label for="check_all_domains"><?php echo $checkall ?></label>
          </div>
-         -->
          <div>
             <?php
             $pogdomains = array();
             if(!isset($_SESSION['pogdomains'])){
-               $pogdomains = array('com', 'net');
+               $pogdomains = array('com', 'net', 'info', 'org');
             } else {
                $pogdomains = $_SESSION['pogdomains'];
             }

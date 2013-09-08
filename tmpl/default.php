@@ -6,41 +6,13 @@ defined('_JEXEC') or die('Restricted access');
 <script>
    $(document).ready(function() {
       $('#check_all_domains').click(function() {
-         var c = $(this).is(':checked') ? 'checked' : false;
-         console.info(c);
-         if (c) {
-            $('.domains_and_countries').attr('checked', c);
-         } else {
-            $('.domains_and_countries').removeAttr('checked');
-         }
+         $('.domains_chks').prop('checked', $(this).is(':checked'));
       });
 
    });
 
 </script>
 
-<style>
-   /*
-   .pretext{
-      margin-bottom:8px;
-   }
-   .label{
-      font-weight:bold;
-   }
-   .domainname {
-      margin-top:8px; 
-      margin-bottom:8px;
-   }
-   .checkboxes{
-      margin-top:8px; margin-bottom:8px;
-   }
-   #caption {
-      margin-top:8px; 
-      margin-bottom:8px; 
-      font-weight:bold;
-   }
-   */
-</style>
 
 <?php if ($pretext != "") { ?>
    <div class="pretext">
@@ -66,7 +38,7 @@ defined('_JEXEC') or die('Restricted access');
                <?php
                $chk_tlds = $dck->getCheckboxTLDS($tlds, $chosen_tlds);
                foreach ($chk_tlds as $cd) {
-                  echo $cd;
+                  echo '<span class="checkbox_wrapper">'.$cd.'</span>';
                }
                ?> 
             </div>
@@ -74,7 +46,7 @@ defined('_JEXEC') or die('Restricted access');
                <?php
                $chk_countries = $dck->getCheckboxCountries($countries, $chosen_countries);
                foreach ($chk_countries as $cc) {
-                  echo $cc;
+                  echo '<span class="checkbox_wrapper">'.$cc.'</span>';
                }
                ?> 
             </div>

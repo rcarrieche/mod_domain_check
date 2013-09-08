@@ -176,7 +176,7 @@ class modDomainCheckHelper {
          if (in_array($c, $checados)) {
             $checked = 'checked="checked"';
          }
-         $countries_arr[] = "<input type='checkbox' class='domains_and_countries' name='chosen_countries[]' value='$c' $checked /> " . ($c == 'iii' ? 'Internacional' : $c);
+         $countries_arr[] = "<input type='checkbox' class='domains_chks' name='chosen_countries[]' value='$c' $checked /> " . ($c == 'iii' ? 'Internacional' : $c);
       }
       return $countries_arr;
    }
@@ -194,7 +194,7 @@ class modDomainCheckHelper {
             $checked = 'checked="checked"';
          }
          if ($dom !== "") {
-            $tlds_arr[] = "<input type='checkbox' name='chosen_tlds[]' value='$dom' $checked/> $dom";
+            $tlds_arr[] = "<input type='checkbox' class='domains_chks' name='chosen_tlds[]' value='$dom' $checked/> $dom";
          }
       }
       return $tlds_arr;

@@ -1,0 +1,93 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 08/09/2013, 05:13:06
+    Author     : shuma
+*/
+
+#form_domain_check {
+   background-color: #EDEDED;
+}
+.pretext{
+   margin-bottom:8px;
+}
+.label{
+   /*font-weight:bold;*/
+   font-size: 15px;
+}
+.domainname {
+   margin-top:8px; 
+   margin-bottom:8px;
+   width: 100%;
+}
+.checkboxes{
+   margin-top:8px; margin-bottom:8px;
+}
+#caption {
+   margin-top:16px; 
+   margin-bottom:8px; 
+   font-weight:bold;
+}
+.avaliable_text {
+   background-color: #E1ECD3;
+   color: #8F9F79;
+   font: 12px Arial;
+   font-weight: bold;
+   display: block;
+   float: left;
+   padding: 8px 0;
+   width: 100%;
+
+}
+.taken_text {
+   background-color: #ECE1D3;
+   color: #9F8F79;
+   font: 12px Arial;
+   font-weight: bold;
+   display: block;
+   float: left;
+   padding: 8px 0;
+   width: 100%;
+}
+.avaliable_text span, .taken_text span{
+   vertical-align: middle;
+   padding: 0 0 10px 10px;
+}
+.avaliable_text span.domain_txt, .taken_text span.domain_txt{
+   float: right;
+}
+.pre_domain_text {
+   font-weight: bold;
+   font: 13px;
+
+}
+.submit_domain {
+   color: #FFFFFF !important;
+   font-weight: normal;
+   border: medium none;
+   border: medium none;
+   cursor: pointer;
+   float: right; 
+   font-size: 12px;
+   height: 45px;
+   line-height: 71px;
+   margin-left: 5px;
+   padding-bottom: 3px;
+   width: 140px;
+   background: linear-gradient(#008F00, #155214) repeat scroll 0 0 transparent !important;
+   display: inline-block;
+   list-style: none outside none;
+   border-radius: 4px 4px 4px 4px;
+
+}
+.result_error{
+   border: 2px solid red;
+   background-color: #ECB1D3;
+}
+.tlds_and_countries {
+   font-weight: bold !important;
+   margin: 4px 0 4px 0;
+}

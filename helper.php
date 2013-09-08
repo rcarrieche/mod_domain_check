@@ -23,10 +23,38 @@ class modDomainCheckHelper {
        'uk' => array('default' => 'whois.nic.uk'),
        'default' => ''
    );
+   protected $textos = array(
+       'iii' => array(
+           'com' => array(
+               'avaliable' => array('No match for'),
+               'taken' => array(),
+               'error' => array()
+           ),
+           'org' => array(
+               'avaliable' => array('NOT FOUND'),
+               'taken' => array(),
+               'error' => array()
+           ),
+           'default' => array(
+               'avaliable' => array('No match for'),
+               'taken' => array(),
+               'error' => array()
+           )
+       ),
+       'br' => array(
+           'default' => array(
+               'avaliable' => array('No match for'),
+               'taken' => array(),
+               'error' => array()
+           )
+       ),
+       'default' => array('No match for')
+   );
    protected $checados;
    private static $instance = null;
    protected $avaliable_text = 'Avaliable';
    protected $taken_text = 'Taken';
+   protected $errors = array();
 
    private function __construct() {
       
@@ -54,8 +82,8 @@ class modDomainCheckHelper {
 
    public function checkDomain($domain, $server, $findArray) {
       $response = $this->getServerResponse($domain, $server);
-      if(!$response){
-         echo '<div class="erro">Erro ao conectar no servidor</div>';
+      if (!$response) {
+         $this->errors[] = '<div class="result_error">Server error: ' . $domain . '</div>';
       }
       $tem_text = false;
       foreach ($findArray as $ftext) {
@@ -76,9 +104,13 @@ class modDomainCheckHelper {
       $taken_text = $this->taken_text;
       $chk = $this->checkDomain($domain, $server, $findArray);
       if ($chk) {
-         return "<div class='avaliable_text'>$domain $avaliable_text</div>";
+         return "<div class='avaliable_text'>"
+         . "<img width='20px' height='20px' src='".JURI::root()."modules/mod_domain_check/images/registro_ok.png'><span>$domain </span><span class='domain_txt'>$avaliable_text</span>"
+                 . "</div>";
       } else {
-         return "<div class='taken_text'>$domain $taken_text</div>"; //margin-bottom:4px
+         return "<div class='taken_text'>"
+         . "<img width='20px' height='20px' src='".JURI::root()."modules/mod_domain_check/images/registro_fail.png'><span>$domain </span><span class='domain_txt'>$taken_text</span>"
+                 . "</div>";
       }
    }
 
@@ -91,26 +123,7 @@ class modDomainCheckHelper {
     */
    public function getFindArray($country, $tld, $conf = 'avaliable') {
       $retorno = null;
-      $comum = array(
-          'avaliable' => array('No match for'),
-          'taken' => array(),
-          'error' => array()
-      );
-      $textos = array(
-          'iii' => array(
-              'com' => $comum,
-              'org' => array(
-                  'avaliable' => array('NOT FOUND'),
-                  'taken' => array(),
-                  'error' => array()
-              ),
-              'default' => $comum
-          ),
-          'br' => array(
-              'default' => $comum
-          ),
-          'default' => array('No match for')
-      );
+      $textos = $this->textos;
       if (isset($textos[$country])) {
          $lista_textos = $textos[$country];
          if (isset($lista_textos[$tld])) {
@@ -146,6 +159,12 @@ class modDomainCheckHelper {
       return $retorno;
    }
 
+   public function getErrors() {
+      $a = $this->errors;
+      $this->errors = array();
+      return $a;
+   }
+
    public function getCheckboxCountries($countries = array('iii' => ''), $checados = array('iii', 'br')) {
       if (!$countries || !is_array($countries) || !count($countries)) {
          return array();
@@ -157,32 +176,28 @@ class modDomainCheckHelper {
          if (in_array($c, $checados)) {
             $checked = 'checked="checked"';
          }
-         if ($c && $c != "iii") {
-            $countries_arr[] = "<input type='checkbox' class='domains_and_countries' name='$c' value='$c' $checked /> $c";
-         } else if ($c === 'iii') {
-            $countries_arr[] = "<input type='checkbox' class='domains_and_countries' name='iii' value='iii' $checked /> Internacional";
-         }
+         $countries_arr[] = "<input type='checkbox' class='domains_and_countries' name='chosen_countries[]' value='$c' $checked /> " . ($c == 'iii' ? 'Internacional' : $c);
       }
       return $countries_arr;
    }
 
-   public function getCheckboxDomains($domains, $checados = array('com', 'org', 'net')) {
-      // se não tiver nenhuma entrada pra $domains, retorna false.
-      if (!$domains || !is_array($domains) || !count($domains)) {
+   public function getCheckboxTLDS($tlds, $checados = array('com', 'org', 'net')) {
+      // se não tiver nenhuma entrada pra $tlds, retorna false.
+      if (!$tlds || !is_array($tlds) || !count($tlds)) {
          return false;
       }
 
-      $domains_arr = array();
-      foreach ($domains as $k => $dom) {
+      $tlds_arr = array();
+      foreach ($tlds as $k => $dom) {
          $checked = '';
          if (in_array($dom, $checados)) {
             $checked = 'checked="checked"';
          }
          if ($dom !== "") {
-            $domains_arr[] = "<input type='checkbox' class='domains_and_countries' name='$dom' value='$dom' $checked/> $dom";
+            $tlds_arr[] = "<input type='checkbox' name='chosen_tlds[]' value='$dom' $checked/> $dom";
          }
       }
-      return $domains_arr;
+      return $tlds_arr;
    }
 
    public function results($domainbase, array $tlds, array $countries) {

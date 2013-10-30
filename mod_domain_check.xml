@@ -7,32 +7,16 @@
    <authorEmail>renato.shuma@gmail.com</authorEmail>
    <authorUrl>www.google.com</authorUrl>
    <version>2.1.2</version>
-   <description>Mostra os domínios disponíveis. lalala</description>
-   <!--
-   <install>
-      <sql>
-         <file driver="mysql" charset="utf8">sql/mysql/install.mysql.utf8.sql</file>
-      </sql>
-   </install>
-   <uninstall>
-      <sql>
-         <file driver="mysql" charset="utf8">sql/mysql/uninstall.mysql.utf8.sql</file>
-      </sql>
-   </uninstall>
-   -->
+   <description>Mostra os domínios disponíveis. </description>
    <files>
       <filename>mod_domain_check.xml</filename> 
       <filename module="mod_domain_check">mod_domain_check.php</filename> 
       <filename>helper.php</filename> 
-      <filename>helper.php</filename> 
+      <filename>tmpl/default.php</filename> 
       <filename>script.php</filename> 
       <filename>css/mod_domain_check.css</filename> 
       <filename>images/registro_ok.png</filename> 
       <filename>images/registro_fail.png</filename> 
-      <!--
-      <filename>sql/mysql/install.mysql.utf8.sql</filename> 
-      <filename>sql/mysql/uninstall.mysql.utf8.sql</filename> 
-      -->
    </files>
    <config>
       <fields name="params">
